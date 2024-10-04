@@ -1,0 +1,19 @@
+{
+    "name": "@iskay-kimsa-tawa/backend",
+    "description": "",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "install": "go mod tidy",
+      "test": "go test ./...",
+      "dev": "nodemon --exec go run main.go --signal SIGTERM",
+      "build": "go build -o ./dist/main ./main.go"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "nodemon": "^2.0.22"
+    }
+  }
+  

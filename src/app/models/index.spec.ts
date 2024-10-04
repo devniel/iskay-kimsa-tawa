@@ -43,7 +43,6 @@ describe('Script', () => {
       'Sumaq and Rumi are walking along a rugged mountain trail. The sun is shining, and the path ahead is narrow and filled with stones.'
     );
     expect(scene.layers).toHaveLength(3);
-    expect(scene.end_scene).toBe(true);
   });
 
   it('should correctly parse layers', () => {

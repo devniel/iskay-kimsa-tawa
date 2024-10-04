@@ -1,10 +1,13 @@
+import yaml from 'js-yaml';
+import { Script } from 'app/models';
+
+const data = `
 title: "The Hidden Path"
 characters:
   - name: Sumaq
     description: A young explorer
   - name: Rumi
     description: Sumaq's friend
-
 scenes:
   - scene_number: 1
     location: "EXT. MOUNTAIN TRAIL"
@@ -27,3 +30,9 @@ scenes:
         events:
           - description: "The wind picks up, rustling the leaves of nearby trees."
           - description: "Small stones tumble down the mountain slope, dislodged by the movement of animals unseen."
+`;
+
+export const fetchScript = async (): Promise<Script> => {
+  const script = yaml.load(data) as Script;
+  return script;
+};

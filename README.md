@@ -74,3 +74,4 @@ scenes:
 - Frontend: Next.js, TypeScript, TailwindCSS
 - Backend: Go, Gin
 - Build: A basic monorepo.
+- Package manager: PNPM (to easy have isolated node_modules hence easy dockerization)

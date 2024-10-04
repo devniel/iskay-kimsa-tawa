@@ -95,4 +95,58 @@ describe('Script', () => {
     expect(jsonData).toHaveProperty('characters');
     expect(jsonData).toHaveProperty('scenes');
   });
+
+  it('should convert Script to JSON and back to Script', () => {
+    const originalScript = Script.fromYAML(yamlData);
+    const jsonData = originalScript.toJSON();
+    const reconstructedScript = Script.fromJSON(jsonData);
+
+    expect(reconstructedScript).toBeInstanceOf(Script);
+    expect(reconstructedScript).toEqual(originalScript);
+  });
+
+  it('should convert Character to JSON and back to Character', () => {
+    const originalCharacter = new Character('Test', 'Test Description');
+    const jsonData = originalCharacter.toJSON();
+    const reconstructedCharacter = Character.fromJSON(jsonData);
+
+    expect(reconstructedCharacter).toBeInstanceOf(Character);
+    expect(reconstructedCharacter).toEqual(originalCharacter);
+  });
+
+  it('should convert Scene to JSON and back to Scene', () => {
+    const originalScene = new Scene(1, 'Test Location', 'Test Time', 'Test Description', [], true);
+    const jsonData = originalScene.toJSON();
+    const reconstructedScene = Scene.fromJSON(jsonData);
+
+    expect(reconstructedScene).toBeInstanceOf(Scene);
+    expect(reconstructedScene).toEqual(originalScene);
+  });
+
+  it('should convert Layer to JSON and back to Layer', () => {
+    const originalLayer = new Layer('Test Layer', [], []);
+    const jsonData = originalLayer.toJSON();
+    const reconstructedLayer = Layer.fromJSON(jsonData);
+
+    expect(reconstructedLayer).toBeInstanceOf(Layer);
+    expect(reconstructedLayer).toEqual(originalLayer);
+  });
+
+  it('should convert Dialogue to JSON and back to Dialogue', () => {
+    const originalDialogue = new Dialogue('Test Character', 'Test Action', 'Test Line');
+    const jsonData = originalDialogue.toJSON();
+    const reconstructedDialogue = Dialogue.fromJSON(jsonData);
+
+    expect(reconstructedDialogue).toBeInstanceOf(Dialogue);
+    expect(reconstructedDialogue).toEqual(originalDialogue);
+  });
+
+  it('should convert Event to JSON and back to Event', () => {
+    const originalEvent = new Event('Test Description');
+    const jsonData = originalEvent.toJSON();
+    const reconstructedEvent = Event.fromJSON(jsonData);
+
+    expect(reconstructedEvent).toBeInstanceOf(Event);
+    expect(reconstructedEvent).toEqual(originalEvent);
+  });
 });

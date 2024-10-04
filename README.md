@@ -68,3 +68,9 @@ scenes:
 
     end_scene: true
 ```
+
+### Tech Stack
+
+- Frontend: Next.js, TypeScript, TailwindCSS
+- Backend: Go, Gin
+- Build: A basic monorepo.

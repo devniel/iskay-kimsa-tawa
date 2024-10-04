@@ -1,52 +1,36 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "iskay-kimsa-tawa",
+  "version": "1.0.0",
+  "description": "An interactive spatial story about numbers in Quechua",
   "private": true,
+  "workspaces": [
+    "packages/api",
+    "packages/web"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "prepare": "husky",
-    "test": "jest"
+    "dev": "npm run dev --workspace=packages/web & npm run dev --workspace=packages/api",
+    "build": "npm run build --workspace=packages/web && npm run build --workspace=packages/api",
+    "start": "npm run start --workspace=packages/web & npm run start --workspace=packages/api"
   },
-  "dependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/jest": "^29.5.13",
-    "jest": "^29.7.0",
-    "js-yaml": "^4.1.0",
-    "next": "14.2.14",
-    "react": "^18",
-    "react-dom": "^18",
-    "ts-jest": "^29.2.5",
-    "zustand": "^5.0.0-rc.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devniel/iskay-kimsa-tawa.git"
   },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.5.0",
-    "@types/js-yaml": "^4.0.9",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.14",
-    "husky": "^9.1.6",
-    "jest-environment-jsdom": "^29.7.0",
-    "lint-staged": "^15.2.10",
-    "postcss": "^8",
-    "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5"
+  "keywords": [
+    "quechua",
+    "interactive",
+    "spatial",
+    "storytelling",
+    "generativeai",
+    "ai",
+    "python",
+    "nextjs",
+    "monorepo"
+  ],
+  "author": "Daniel Mauricio Flores",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devniel/iskay-kimsa-tawa/issues"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,md}": [
-      "prettier --write"
-    ]
-  }
+  "homepage": "https://github.com/devniel/iskay-kimsa-tawa#readme"
 }

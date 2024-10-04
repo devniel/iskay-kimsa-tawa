@@ -39,7 +39,9 @@ describe('Script', () => {
     expect(scene.scene_number).toBe(1);
     expect(scene.location).toBe('EXT. MOUNTAIN TRAIL');
     expect(scene.time).toBe('DAY');
-    expect(scene.description).toBe('Sumaq and Rumi are walking along a rugged mountain trail. The sun is shining, and the path ahead is narrow and filled with stones.');
+    expect(scene.description).toBe(
+      'Sumaq and Rumi are walking along a rugged mountain trail. The sun is shining, and the path ahead is narrow and filled with stones.'
+    );
     expect(scene.layers).toHaveLength(3);
     expect(scene.end_scene).toBe(true);
   });
@@ -73,7 +75,9 @@ describe('Script', () => {
     expect(dialogues![1]).toBeInstanceOf(Dialogue);
     expect(dialogues![1].character).toBe('Sumaq');
     expect(dialogues![1].action).toBe('(smiling)');
-    expect(dialogues![1].line).toBe('The elders say there are signs in the numbers, Rumi. We just have to look carefully.');
+    expect(dialogues![1].line).toBe(
+      'The elders say there are signs in the numbers, Rumi. We just have to look carefully.'
+    );
   });
 
   it('should correctly parse events', () => {

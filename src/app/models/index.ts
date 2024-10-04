@@ -1,4 +1,4 @@
-import * as yaml from "js-yaml";
+import * as yaml from 'js-yaml';
 
 interface IScript {
   title: string;
@@ -43,9 +43,7 @@ export class Script implements IScript {
 
   constructor(data: IScript) {
     this.title = data.title;
-    this.characters = data.characters.map(
-      (char: ICharacter) => new Character(char.name, char.description)
-    );
+    this.characters = data.characters.map((char: ICharacter) => new Character(char.name, char.description));
     this.scenes = data.scenes.map(
       (scene: IScene) =>
         new Scene(
@@ -58,16 +56,9 @@ export class Script implements IScript {
               new Layer(
                 layer.layer_name,
                 layer.dialogues?.map(
-                  (dialogue: IDialogue) =>
-                    new Dialogue(
-                      dialogue.character,
-                      dialogue.action,
-                      dialogue.line
-                    )
+                  (dialogue: IDialogue) => new Dialogue(dialogue.character, dialogue.action, dialogue.line)
                 ) || [],
-                layer.events?.map(
-                  (event: IEvent) => new Event(event.description)
-                ) || []
+                layer.events?.map((event: IEvent) => new Event(event.description)) || []
               )
           ),
           scene.end_scene
@@ -80,8 +71,8 @@ export class Script implements IScript {
       const jsonData = yaml.load(yamlData) as IScript;
       return new Script(jsonData);
     } catch (error) {
-      console.error("Error parsing YAML:", error);
-      throw new Error("Failed to parse YAML data");
+      console.error('Error parsing YAML:', error);
+      throw new Error('Failed to parse YAML data');
     }
   }
 
@@ -90,8 +81,8 @@ export class Script implements IScript {
       const jsonData = yaml.load(yamlData);
       return JSON.stringify(jsonData, null, 2);
     } catch (error) {
-      console.error("Error converting YAML to JSON:", error);
-      throw new Error("Failed to convert YAML to JSON");
+      console.error('Error converting YAML to JSON:', error);
+      throw new Error('Failed to convert YAML to JSON');
     }
   }
 
@@ -196,11 +187,7 @@ export class Layer implements ILayer {
   }
 
   static fromJSON(json: ILayer): Layer {
-    return new Layer(
-      json.layer_name,
-      json.dialogues?.map(Dialogue.fromJSON),
-      json.events?.map(Event.fromJSON)
-    );
+    return new Layer(json.layer_name, json.dialogues?.map(Dialogue.fromJSON), json.events?.map(Event.fromJSON));
   }
 }
 

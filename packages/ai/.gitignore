@@ -1,0 +1,33 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# Poetry specific
+poetry.lock
+
+# Flask specific
+instance/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Pytest cache
+.pytest_cache/

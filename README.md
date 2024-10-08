@@ -70,6 +70,8 @@ scenes:
 ### Tech Stack
 
 - Frontend: Next.js, TypeScript, TailwindCSS
-- Backend: Go, Gin
+- Backend: 
+  - API: Go, Chi
+  - AI: Python, Flask
 - Build: A basic monorepo.
 - Package manager: PNPM (to easy have isolated node_modules hence easy dockerization)

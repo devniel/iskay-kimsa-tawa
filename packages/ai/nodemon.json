@@ -1,0 +1,5 @@
+{
+    "watch": ["*.py"],
+    "ext": "py",
+    "exec": "poetry run flask --app main run --debug"
+}

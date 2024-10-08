@@ -1,0 +1,12 @@
+{
+  "name": "@iskay-kimsa-tawa/ai",
+  "version": "0.1.0",
+  "description": "AI component for Iskay Kimsa Tawa",
+  "scripts": {
+    "dev": "poetry run flask --app src.app run --debug --port 3003",
+    "build": "poetry install",
+    "start": "poetry run python main.py"
+  },
+  "author": "",
+  "license": "ISC"
+}

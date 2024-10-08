@@ -65,8 +65,6 @@ scenes:
       - name: "The Inca City"
         distance: 1km
         description: "An active inca city."
-
-    end_scene: true
 ```
 
 ### Tech Stack

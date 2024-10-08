@@ -1,0 +1,506 @@
+title: "Iskay Kimsa Tawa"
+characters:
+  - name: Sumaq
+    description: A young explorer
+  - name: Rumi
+    description: Sumaq’s friend
+  - name: Merchant
+    description: A street vendor selling goods in the background
+  - name: Customer
+    description: A street vendor selling goods in the background
+
+scenes:
+  - scene_number: 1
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is looking around, appearing uncertain about their path."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/Are you sure this is the right way, Sumaq?/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 2
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is smiling, exuding confidence in their journey."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/The elders say there are signs in the numbers, Rumi. We just have to look carefully./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 3
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is confused."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/Signs? In numbers?/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 4
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is pointing ahead."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Yes! In Quechua. Watch this./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 5
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is pointing to two large stones on the path."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Huk stone... Iskay stone.../"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 6
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is kneeling down and brushing away some leaves, revealing three more stones."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Kimsa, Tawa, Pichqa!/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 7
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is laughing."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/(laughs)/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 8
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is kneeling down and brushing away some leaves, revealing three more stones."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/One, two, three, four, five. They’re showing us the way!/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 9
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is skeptical, raising an eyebrow."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/Are you sure you're not just counting rocks?/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 10
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is chuckling."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Maybe... but there’s a pattern here. Next should be Suqta, the sixth stone./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 11
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is skeptical."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/Alright, I’ll humor you. But what if we don’t find six?/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 12
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is grinning."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Then we’ll stop and think. But trust me, Rumi, the numbers always tell a story. We just need to listen./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 13
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is shouting."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/Qanchis! That’s seven, Rumi! We’ve found it!/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 14
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is shaking their head, smiling."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/You and your numbers... but I guess they’re working./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+
+  - scene_number: 15
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Sumaq is laughing."
+    pov: "public"
+    layers:
+      - name: "Sumaq"
+        character: "Sumaq"
+        distance: 10m
+        sound: "/See? Numbers always lead the way./"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."

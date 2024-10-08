@@ -1,0 +1,44 @@
+title: "Iskay Kimsa Tawa"
+characters:
+  - name: Sumaq
+    description: A young explorer
+  - name: Rumi
+    description: Sumaq’s friend
+  - name: Merchant
+    description: A street vendor selling goods in the background
+  - name: Customer
+    description: A street vendor selling goods in the background
+
+scenes:
+  - scene_number: 1
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    description: "Rumi is looking around, appearing uncertain about their path."
+    pov: "public"
+    layers:
+      - name: "Rumi"
+        character: "Rumi"
+        distance: 10m
+        sound: "/Are you sure this is the right way, Sumaq?/"
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."

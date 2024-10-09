@@ -1,5 +1,5 @@
-import { Script } from 'app/models';
-import { fetchScript } from 'app/services/api';
+import { Script } from 'models';
+import { fetchScript } from 'services/api';
 import { create } from 'zustand';
 
 interface StoreState {

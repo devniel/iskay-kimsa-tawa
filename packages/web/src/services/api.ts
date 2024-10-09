@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { Script } from 'app/models';
+import { Script } from 'models';
 
 const data = `
 title: "Iskay Kimsa Tawa"

@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import useStore from './store';
+import useStore from '../store';
 import clsx from 'clsx';
-import { Scene } from './models';
+import { Scene } from '../models';
 export default function Home() {
   const { script, status, setScript, setStatus, loadScript } = useStore();
 
@@ -116,7 +116,8 @@ export default function Home() {
         </div>
         <div className="p-4 border border-gray-200">
           <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Canvas</div>
-          <div className="mt-4"></div>
+          <div className="mt-4">
+          </div>
         </div>
         <div className="p-4 border border-gray-200">
           <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Render</div>

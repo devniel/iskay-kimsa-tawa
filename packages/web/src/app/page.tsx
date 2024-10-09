@@ -115,11 +115,11 @@ export default function Home() {
           ))}
         </div>
         <div className="p-4 border border-gray-200">
-          <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Layers Render</div>
+          <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Canvas</div>
           <div className="mt-4"></div>
         </div>
         <div className="p-4 border border-gray-200">
-          <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Scenes Render</div>
+          <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Render</div>
           <div className="mt-4"></div>
         </div>
       </div>

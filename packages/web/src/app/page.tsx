@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import useStore from '../store';
 import clsx from 'clsx';
 import { Scene } from '../models';
+import { Canvas } from '../components/canvas';
+
 export default function Home() {
   const { script, status, setScript, setStatus, loadScript } = useStore();
 
@@ -117,6 +119,7 @@ export default function Home() {
         <div className="p-4 border border-gray-200">
           <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Canvas</div>
           <div className="mt-4">
+            <Canvas />
           </div>
         </div>
         <div className="p-4 border border-gray-200">

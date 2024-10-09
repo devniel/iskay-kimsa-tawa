@@ -3,6 +3,7 @@ import * as yaml from 'js-yaml';
 interface IScript {
   title: string;
   characters: ICharacter[];
+  story: string;
   scenes: IScene[];
 }
 
@@ -18,6 +19,7 @@ interface IScene {
   description: string;
   layers: ILayer[];
   end_scene: boolean;
+  story: string;
 }
 
 interface ILayer {
@@ -40,10 +42,11 @@ export class Script implements IScript {
   title: string;
   characters: Character[];
   scenes: Scene[];
-
+  story: string;
   constructor(data: IScript) {
     this.title = data.title;
     this.characters = data.characters.map((char: ICharacter) => new Character(char.name, char.description));
+    this.story = data.story;
     this.scenes = data.scenes.map(
       (scene: IScene) =>
         new Scene(
@@ -61,7 +64,8 @@ export class Script implements IScript {
                 layer.events?.map((event: IEvent) => new Event(event.description)) || []
               )
           ),
-          scene.end_scene
+          scene.end_scene,
+          scene.story
         )
     );
   }
@@ -91,6 +95,7 @@ export class Script implements IScript {
       title: this.title,
       characters: this.characters.map((char) => char.toJSON()),
       scenes: this.scenes.map((scene) => scene.toJSON()),
+      story: this.story,
     };
   }
 
@@ -127,6 +132,7 @@ export class Scene implements IScene {
   description: string;
   layers: Layer[];
   end_scene: boolean;
+  story: string;
 
   constructor(
     scene_number: number,
@@ -134,7 +140,8 @@ export class Scene implements IScene {
     time: string,
     description: string,
     layers: Layer[],
-    end_scene: boolean
+    end_scene: boolean,
+    story: string
   ) {
     this.scene_number = scene_number;
     this.location = location;
@@ -142,6 +149,7 @@ export class Scene implements IScene {
     this.description = description;
     this.layers = layers;
     this.end_scene = end_scene;
+    this.story = story;
   }
 
   toJSON(): IScene {
@@ -152,6 +160,7 @@ export class Scene implements IScene {
       description: this.description,
       layers: this.layers.map((layer) => layer.toJSON()),
       end_scene: this.end_scene,
+      story: this.story,
     };
   }
 
@@ -162,7 +171,8 @@ export class Scene implements IScene {
       json.time,
       json.description,
       json.layers.map(Layer.fromJSON),
-      json.end_scene
+      json.end_scene,
+      json.story
     );
   }
 }

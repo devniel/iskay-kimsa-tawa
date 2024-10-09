@@ -2,34 +2,114 @@ import yaml from 'js-yaml';
 import { Script } from 'app/models';
 
 const data = `
-title: "The Hidden Path"
+title: "Iskay Kimsa Tawa"
 characters:
-  - name: Sumaq
-    description: A young explorer
-  - name: Rumi
-    description: Sumaq's friend
+  - name: Hand
+    description: A hand
+story: |+
+  Iskay
+  Kimsa
+  Tawa
 scenes:
   - scene_number: 1
-    location: "EXT. MOUNTAIN TRAIL"
-    time: "DAY"
-    description: "Sumaq and Rumi are walking along a rugged mountain trail. The sun is shining, and the path ahead is narrow and filled with stones."
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:00 12/02/1480"
+    pov: "public"
+    story: "Iskay"
     layers:
-      - layer_name: "Foreground - Main Dialogue"
-        dialogues:
-          - character: "Rumi"
-            action: "(looking around)"
-            line: "Are you sure this is the right way, Sumaq?"
-          - character: "Sumaq"
-            action: "(smiling)"
-            line: "The elders say there are signs in the numbers, Rumi. We just have to look carefully."
-      - layer_name: "Background - Nature Movement"
-        events:
-          - description: "A bird is seen flying above the characters, casting a shadow briefly."
-          - description: "A river runs along the edge of the trail, its sound barely audible."
-      - layer_name: "Background - Environmental Cues"
-        events:
-          - description: "The wind picks up, rustling the leaves of nearby trees."
-          - description: "Small stones tumble down the mountain slope, dislodged by the movement of animals unseen."
+      - name: "Counting"
+        character: "Hand"
+        distance: 10m
+        sound: "Iskay"
+        description: "A detailed image of a human hand with fingers extended to show the number 1. The hand is positioned in front of a neutral background, with the index finger pointing upward, while the other fingers are closed into the palm. The skin tone is natural, and the lighting highlights the contours and details of the hand. The image focuses on the hand, with no other elements distracting from the gesture."
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+  - scene_number: 2
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:10 12/02/1480"
+    pov: "public"
+    story: "Kimsa"
+    layers:
+      - name: "Counting"
+        character: "Hand"
+        distance: 10m
+        sound: "Kimsa"
+        description: "A detailed image of a human hand showing the number 2 by holding the index and middle fingers up, while the other fingers are curled into the palm. The hand is positioned in front of a neutral background with soft lighting, highlighting the texture of the skin and the smooth lines of the fingers. The gesture is clear and central to the image, with no other distractions."
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."
+  - scene_number: 3
+    location: "A mountain trail in the Peruvian Andes"
+    time: "13:00:20 12/02/1480"
+    pov: "public"
+    story: "Tawa"
+    layers:
+      - name: "Counting"
+        character: "Hand"
+        distance: 10m
+        sound: "Tawa"
+        description: "A detailed image of a human hand showing the number 3 by holding the index, middle, and ring fingers up, while the thumb and pinky are curled into the palm. The hand is positioned in front of a neutral background with soft lighting, emphasizing the skin's natural texture and the clarity of the gesture. The focus is entirely on the hand and its position, with no other distracting elements."
+      - name: "The bird"
+        distance: 200m
+        altitude: 100m
+        description: "A bird flying, casting a shadow briefly."
+      - name: "The river"
+        distance: 1km
+        description: "A river runs along the edge of a mountain trail, its sound barely audible."
+      - name: "Environmental Cues"
+        description: "The wind picks up, rustling the leaves of nearby trees."
+      - name: "The Wind"
+        sound: "A sound of wind"
+      - name: "The Stones"
+        description: "A collection of stones on the mountain trail."
+      - name: "The Trees"
+        description: "A collection of trees on the mountain trail."
+      - name: "The Sky"
+        description: "The sky is blue, with a few clouds."
+      - name: "The Sun"
+        description: "The sun is shining down on the mountain trail."
+      - name: "The Inca City"
+        distance: 1km
+        description: "An active Inca city."  
 `;
 
 export const fetchScript = async (): Promise<Script> => {

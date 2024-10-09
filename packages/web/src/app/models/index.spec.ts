@@ -1,12 +1,12 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { Script, Character, Scene, Layer, Dialogue, Event } from './index';
+import { Script, Character, Scene, Layer } from './index';
 
 describe('Script', () => {
   let yamlData: string;
 
   beforeAll(() => {
-    const filePath = join(__dirname, '../fixtures/script.yml');
+    const filePath = join(__dirname, '../../../../fixtures/scripts/script_small.yml');
     yamlData = readFileSync(filePath, 'utf8');
   });
 
@@ -14,8 +14,8 @@ describe('Script', () => {
     const script = Script.fromYAML(yamlData);
 
     expect(script).toBeInstanceOf(Script);
-    expect(script.title).toBe('The Hidden Path');
-    expect(script.characters).toHaveLength(2);
+    expect(script.title).toBe('Iskay Kimsa Tawa');
+    expect(script.characters).toHaveLength(4);
     expect(script.scenes).toHaveLength(1);
   });
 
@@ -29,6 +29,14 @@ describe('Script', () => {
     expect(script.characters[1]).toBeInstanceOf(Character);
     expect(script.characters[1].name).toBe('Rumi');
     expect(script.characters[1].description).toBe("Sumaq's friend");
+
+    expect(script.characters[2]).toBeInstanceOf(Character);
+    expect(script.characters[2].name).toBe('Merchant');
+    expect(script.characters[2].description).toBe('A street vendor selling goods in the background');
+
+    expect(script.characters[3]).toBeInstanceOf(Character);
+    expect(script.characters[3].name).toBe('Customer');
+    expect(script.characters[3].description).toBe('A street vendor selling goods in the background');
   });
 
   it('should correctly parse scenes', () => {
@@ -37,12 +45,10 @@ describe('Script', () => {
 
     expect(scene).toBeInstanceOf(Scene);
     expect(scene.scene_number).toBe(1);
-    expect(scene.location).toBe('EXT. MOUNTAIN TRAIL');
-    expect(scene.time).toBe('DAY');
-    expect(scene.description).toBe(
-      'Sumaq and Rumi are walking along a rugged mountain trail. The sun is shining, and the path ahead is narrow and filled with stones.'
-    );
-    expect(scene.layers).toHaveLength(3);
+    expect(scene.location).toBe('A mountain trail in the Peruvian Andes');
+    expect(scene.time).toBe('13:00:00 12/02/1480');
+    expect(scene.description).toBe('Rumi is looking around, appearing uncertain about their path.');
+    expect(scene.layers).toHaveLength(10);
   });
 
   it('should correctly parse layers', () => {
@@ -50,51 +56,28 @@ describe('Script', () => {
     const layers = script.scenes[0].layers;
 
     expect(layers[0]).toBeInstanceOf(Layer);
-    expect(layers[0].layer_name).toBe('Foreground - Main Dialogue');
-    expect(layers[0].dialogues).toHaveLength(2);
+    expect(layers[0].name).toBe('Rumi');
+    expect(layers[0].character).toBe('Rumi');
+    expect(layers[0].distance).toBe('10m');
+    expect(layers[0].sound).toBe('/Are you sure this is the right way, Sumaq?/');
 
     expect(layers[1]).toBeInstanceOf(Layer);
-    expect(layers[1].layer_name).toBe('Background - Nature Movement');
-    expect(layers[1].events).toHaveLength(2);
+    expect(layers[1].name).toBe('The bird');
+    expect(layers[1].distance).toBe('200m');
+    expect(layers[1].altitude).toBe('100m');
+    expect(layers[1].description).toBe('A bird flying, casting a shadow briefly.');
 
     expect(layers[2]).toBeInstanceOf(Layer);
-    expect(layers[2].layer_name).toBe('Background - Environmental Cues');
-    expect(layers[2].events).toHaveLength(2);
-  });
-
-  it('should correctly parse dialogues', () => {
-    const script = Script.fromYAML(yamlData);
-    const dialogues = script.scenes[0].layers[0].dialogues;
-
-    expect(dialogues![0]).toBeInstanceOf(Dialogue);
-    expect(dialogues![0].character).toBe('Rumi');
-    expect(dialogues![0].action).toBe('(looking around)');
-    expect(dialogues![0].line).toBe('Are you sure this is the right way, Sumaq?');
-
-    expect(dialogues![1]).toBeInstanceOf(Dialogue);
-    expect(dialogues![1].character).toBe('Sumaq');
-    expect(dialogues![1].action).toBe('(smiling)');
-    expect(dialogues![1].line).toBe(
-      'The elders say there are signs in the numbers, Rumi. We just have to look carefully.'
-    );
-  });
-
-  it('should correctly parse events', () => {
-    const script = Script.fromYAML(yamlData);
-    const events = script.scenes[0].layers[1].events;
-
-    expect(events![0]).toBeInstanceOf(Event);
-    expect(events![0].description).toBe('A bird is seen flying above the characters, casting a shadow briefly.');
-
-    expect(events![1]).toBeInstanceOf(Event);
-    expect(events![1].description).toBe('A river runs along the edge of the trail, its sound barely audible.');
+    expect(layers[2].name).toBe('The river');
+    expect(layers[2].distance).toBe('1km');
+    expect(layers[2].description).toBe('A river runs along the edge of a mountain trail, its sound barely audible.');
   });
 
   it('should convert YAML to JSON', () => {
     const jsonString = Script.yamlToJSON(yamlData);
     const jsonData = JSON.parse(jsonString);
 
-    expect(jsonData).toHaveProperty('title', 'The Hidden Path');
+    expect(jsonData).toHaveProperty('title', 'Iskay Kimsa Tawa');
     expect(jsonData).toHaveProperty('characters');
     expect(jsonData).toHaveProperty('scenes');
   });
@@ -118,7 +101,7 @@ describe('Script', () => {
   });
 
   it('should convert Scene to JSON and back to Scene', () => {
-    const originalScene = new Scene(1, 'Test Location', 'Test Time', 'Test Description', [], true);
+    const originalScene = new Scene(1, 'Test Location', 'Test Time', 'Test Description', [], 'Test Story');
     const jsonData = originalScene.toJSON();
     const reconstructedScene = Scene.fromJSON(jsonData);
 
@@ -127,29 +110,11 @@ describe('Script', () => {
   });
 
   it('should convert Layer to JSON and back to Layer', () => {
-    const originalLayer = new Layer('Test Layer', [], []);
+    const originalLayer = new Layer('Test Layer', 'Test Character', 'Test Distance', 'Test Altitude', 'Test Sound', 'Test Description');
     const jsonData = originalLayer.toJSON();
     const reconstructedLayer = Layer.fromJSON(jsonData);
 
     expect(reconstructedLayer).toBeInstanceOf(Layer);
     expect(reconstructedLayer).toEqual(originalLayer);
-  });
-
-  it('should convert Dialogue to JSON and back to Dialogue', () => {
-    const originalDialogue = new Dialogue('Test Character', 'Test Action', 'Test Line');
-    const jsonData = originalDialogue.toJSON();
-    const reconstructedDialogue = Dialogue.fromJSON(jsonData);
-
-    expect(reconstructedDialogue).toBeInstanceOf(Dialogue);
-    expect(reconstructedDialogue).toEqual(originalDialogue);
-  });
-
-  it('should convert Event to JSON and back to Event', () => {
-    const originalEvent = new Event('Test Description');
-    const jsonData = originalEvent.toJSON();
-    const reconstructedEvent = Event.fromJSON(jsonData);
-
-    expect(reconstructedEvent).toBeInstanceOf(Event);
-    expect(reconstructedEvent).toEqual(originalEvent);
   });
 });

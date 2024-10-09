@@ -18,24 +18,16 @@ interface IScene {
   time: string;
   description: string;
   layers: ILayer[];
-  end_scene: boolean;
   story: string;
 }
 
 interface ILayer {
-  layer_name: string;
-  dialogues?: IDialogue[];
-  events?: IEvent[];
-}
-
-interface IDialogue {
-  character: string;
-  action: string;
-  line: string;
-}
-
-interface IEvent {
-  description: string;
+  name: string;
+  character?: string;
+  distance?: string;
+  altitude?: string;
+  sound?: string;
+  description?: string;
 }
 
 export class Script implements IScript {
@@ -57,14 +49,14 @@ export class Script implements IScript {
           scene.layers.map(
             (layer: ILayer) =>
               new Layer(
-                layer.layer_name,
-                layer.dialogues?.map(
-                  (dialogue: IDialogue) => new Dialogue(dialogue.character, dialogue.action, dialogue.line)
-                ) || [],
-                layer.events?.map((event: IEvent) => new Event(event.description)) || []
+                layer.name,
+                layer.character,
+                layer.distance,
+                layer.altitude,
+                layer.sound,
+                layer.description
               )
           ),
-          scene.end_scene,
           scene.story
         )
     );
@@ -131,7 +123,6 @@ export class Scene implements IScene {
   time: string;
   description: string;
   layers: Layer[];
-  end_scene: boolean;
   story: string;
 
   constructor(
@@ -140,7 +131,6 @@ export class Scene implements IScene {
     time: string,
     description: string,
     layers: Layer[],
-    end_scene: boolean,
     story: string
   ) {
     this.scene_number = scene_number;
@@ -148,7 +138,6 @@ export class Scene implements IScene {
     this.time = time;
     this.description = description;
     this.layers = layers;
-    this.end_scene = end_scene;
     this.story = story;
   }
 
@@ -159,7 +148,6 @@ export class Scene implements IScene {
       time: this.time,
       description: this.description,
       layers: this.layers.map((layer) => layer.toJSON()),
-      end_scene: this.end_scene,
       story: this.story,
     };
   }
@@ -171,74 +159,54 @@ export class Scene implements IScene {
       json.time,
       json.description,
       json.layers.map(Layer.fromJSON),
-      json.end_scene,
       json.story
     );
   }
 }
 
 export class Layer implements ILayer {
-  layer_name: string;
-  dialogues?: Dialogue[];
-  events?: Event[];
+  name: string;
+  character?: string;
+  distance?: string;
+  altitude?: string;
+  sound?: string;
+  description?: string;
 
-  constructor(layer_name: string, dialogues?: Dialogue[], events?: Event[]) {
-    this.layer_name = layer_name;
-    this.dialogues = dialogues;
-    this.events = events;
+  constructor(
+    name: string,
+    character?: string,
+    distance?: string,
+    altitude?: string,
+    sound?: string,
+    description?: string
+  ) {
+    this.name = name;
+    this.character = character;
+    this.distance = distance;
+    this.altitude = altitude;
+    this.sound = sound;
+    this.description = description;
   }
 
   toJSON(): ILayer {
     return {
-      layer_name: this.layer_name,
-      dialogues: this.dialogues?.map((dialogue) => dialogue.toJSON()),
-      events: this.events?.map((event) => event.toJSON()),
-    };
-  }
-
-  static fromJSON(json: ILayer): Layer {
-    return new Layer(json.layer_name, json.dialogues?.map(Dialogue.fromJSON), json.events?.map(Event.fromJSON));
-  }
-}
-
-export class Dialogue implements IDialogue {
-  character: string;
-  action: string;
-  line: string;
-
-  constructor(character: string, action: string, line: string) {
-    this.character = character;
-    this.action = action;
-    this.line = line;
-  }
-
-  toJSON(): IDialogue {
-    return {
+      name: this.name,
       character: this.character,
-      action: this.action,
-      line: this.line,
-    };
-  }
-
-  static fromJSON(json: IDialogue): Dialogue {
-    return new Dialogue(json.character, json.action, json.line);
-  }
-}
-
-export class Event implements IEvent {
-  description: string;
-
-  constructor(description: string) {
-    this.description = description;
-  }
-
-  toJSON(): IEvent {
-    return {
+      distance: this.distance,
+      altitude: this.altitude,
+      sound: this.sound,
       description: this.description,
     };
   }
 
-  static fromJSON(json: IEvent): Event {
-    return new Event(json.description);
+  static fromJSON(json: ILayer): Layer {
+    return new Layer(
+      json.name,
+      json.character,
+      json.distance,
+      json.altitude,
+      json.sound,
+      json.description
+    );
   }
 }

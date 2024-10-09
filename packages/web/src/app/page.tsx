@@ -40,7 +40,7 @@ export default function Home() {
   console.log(storyHighlights);
 
   return (
-    <div className="container m-auto p-4 flex flex-col gap-2">
+    <div className="m-auto p-4 flex flex-col gap-2">
       <style>
         {`
         ${Object.values(storyHighlights)
@@ -56,7 +56,7 @@ export default function Home() {
       `}
       </style>
       <h6 className="text-2xl">{script?.title}</h6>
-      <div className="grid grid-cols-5">
+      <div className="grid" style={{ gridTemplateColumns: '200px 300px 700px 1000px 500px' }}>
         <div className="p-4 border border-gray-200">
           <div className="prose prose-lg prose-indigo whitespace-pre-line dark:text-white">Story</div>
           <div className={clsx('tokens', 'prose prose-lg prose-indigo whitespace-pre-line dark:text-white italic')}>

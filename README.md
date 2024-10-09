@@ -38,10 +38,6 @@ scenes:
         distance: 10m
         description: "Rumi is looking around, appearing uncertain about their path."
         sound: "/ɑː juː ʃʊə ðɪs ɪz ðə raɪt weɪ, suːmæk?/"
-      - name: "Sumaq"
-        distance: 10m
-        description: "Sumaq is smiling, exuding confidence in their journey."
-        sound: "/ðə ɛldəz seɪ ðeə ɑː saɪnz ɪn ðə nʌmbəz, ruːmiː. wiː dʒʌst hæv tuː lʊk keəfʊli./"
       - name: "The bird"
         distance: 200m
         # Altitude from the pov and to calculate layer merging.

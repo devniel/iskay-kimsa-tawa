@@ -1,4 +1,4 @@
-import { Canvas as R3FCanvas } from '@react-three/fiber';
+import { Canvas as R3FCanvas, useLoader } from '@react-three/fiber';
 import {
   PerspectiveCamera,
   Grid,
@@ -8,24 +8,80 @@ import {
   GizmoHelper,
   GizmoViewport,
   Text,
+  Billboard,
 } from '@react-three/drei';
+import { TextureLoader } from 'three';
+import * as THREE from 'three';
+
+const ImagePlane = ({ position, imageUrl, label, scale = [2, 2, 1] }) => {
+  const texture = useLoader(TextureLoader, imageUrl);
+
+  return (
+    <PivotControls
+      rotation={[0, -Math.PI / 2, 0]}
+      anchor={[1, -1, -1]}
+      scale={75}
+      depthTest={false}
+      fixed
+      lineWidth={2}
+    >
+      <group position={position}>
+        <Billboard>
+          <mesh castShadow receiveShadow scale={scale}>
+            <planeGeometry args={[2, 2]} />
+            <meshStandardMaterial
+              map={texture}
+              transparent={true}
+              side={THREE.DoubleSide}
+              alphaTest={0.5}
+            />
+          </mesh>
+        </Billboard>
+        <Billboard>
+          <Text
+            position={[0, scale[1] / 2 + 0.5, 0]}
+            fontSize={0.5}
+            color="white"
+            anchorX="center"
+            anchorY="middle"
+          >
+            {label}
+          </Text>
+        </Billboard>
+      </group>
+    </PivotControls>
+  );
+};
 
 export const Canvas = () => {
   return (
     <R3FCanvas
       shadows
       raycaster={{ params: { Line: { threshold: 0.15 } } }}
-      className="w-full !h-[500px]"
+      className="w-full !h-[500px] bg-slate-700"
     >
       {/* Ambiance */}
       <SoftShadows />
-      <directionalLight castShadow position={[2.5, 5, 5]} intensity={1.5} shadow-mapSize={[1024, 1024]}>
-        <orthographicCamera attach="shadow-camera" args={[-5, 5, 5, -5, 1, 50]} />
+      <directionalLight
+        castShadow
+        position={[2.5, 5, 5]}
+        intensity={1.5}
+        shadow-mapSize={[1024, 1024]}
+      >
+        <orthographicCamera
+          attach="shadow-camera"
+          args={[-5, 5, 5, -5, 1, 50]}
+        />
       </directionalLight>
       <ambientLight intensity={0.5} />
 
       {/* Cameras */}
-      <PerspectiveCamera makeDefault position={[0, 0, 10]} near={0.1} far={2000} />
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 0, 10]}
+        near={0.1}
+        far={2000}
+      />
 
       {/* Objects */}
       <mesh scale={20} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
@@ -33,74 +89,26 @@ export const Canvas = () => {
         <shadowMaterial transparent opacity={0.5} />
       </mesh>
 
-      <PivotControls
-        rotation={[0, -Math.PI / 2, 0]}
-        anchor={[1, -1, -1]}
-        scale={75}
-        depthTest={false}
-        fixed
-        lineWidth={2}
-      >
-        <mesh castShadow receiveShadow position={[0, 0, 0]}>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial />
-          <Text
-            position={[0, 2, 0]}
-            fontSize={0.5}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-          >
-            Counting
-          </Text>
-        </mesh>
-      </PivotControls>
+      <ImagePlane
+        position={[0, 2, 0]}
+        imageUrl="/1.png"
+        label="Counting"
+        scale={[2, 2, 1]}
+      />
 
-      <PivotControls
-        rotation={[0, -Math.PI / 2, 0]}
-        anchor={[1, -1, -1]}
-        scale={75}
-        depthTest={false}
-        fixed
-        lineWidth={2}
-      >
-        <mesh castShadow receiveShadow position={[2, 4, -2]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial />
-          <Text
-            position={[0, 1, 0]}
-            fontSize={0.5}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-          >
-            The bird
-          </Text>
-        </mesh>
-      </PivotControls>
+      <ImagePlane
+        position={[-10, 3, -20]}
+        imageUrl="/2.png"
+        label="A mountain"
+        scale={[6, 10, 10]}
+      />
 
-      <PivotControls
-        rotation={[0, -Math.PI / 2, 0]}
-        anchor={[1, -1, -1]}
-        scale={75}
-        depthTest={false}
-        fixed
-        lineWidth={2}
-      >
-        <mesh castShadow receiveShadow position={[-10, 0, -20]}>
-          <boxGeometry args={[6, 10, 10]} />
-          <meshStandardMaterial />
-          <Text
-            position={[0, 7, 0]}
-            fontSize={0.5}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-          >
-            A mountain
-          </Text>
-        </mesh>
-      </PivotControls>
+      <ImagePlane
+        position={[2, 4, -2]}
+        imageUrl="/3.png"
+        label="Condor"
+        scale={[1, 1, 1]}
+      />
 
       {/* Grid */}
       <Grid

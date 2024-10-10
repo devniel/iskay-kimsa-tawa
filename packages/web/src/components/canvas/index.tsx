@@ -12,8 +12,15 @@ import {
 } from '@react-three/drei';
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
+import { useControls } from 'leva';
 
-const ImagePlane = ({ position, imageUrl, label, scale = [2, 2, 1] }) => {
+const ImagePlane = ({
+  position,
+  imageUrl,
+  label,
+  showControls = false,
+  scale = [2, 2, 1],
+}) => {
   const texture = useLoader(TextureLoader, imageUrl);
 
   return (
@@ -24,6 +31,7 @@ const ImagePlane = ({ position, imageUrl, label, scale = [2, 2, 1] }) => {
       depthTest={false}
       fixed
       lineWidth={2}
+      visible={showControls}
     >
       <group position={position}>
         <Billboard>
@@ -54,6 +62,12 @@ const ImagePlane = ({ position, imageUrl, label, scale = [2, 2, 1] }) => {
 };
 
 export const Canvas = () => {
+  const { showControls } = useControls({
+    showControls: {
+      value: false,
+      label: 'Controls',
+    },
+  });
   return (
     <R3FCanvas
       shadows
@@ -94,6 +108,7 @@ export const Canvas = () => {
         imageUrl="/1.png"
         label="Counting"
         scale={[2, 2, 1]}
+        showControls={showControls}
       />
 
       <ImagePlane
@@ -101,6 +116,7 @@ export const Canvas = () => {
         imageUrl="/2.png"
         label="A mountain"
         scale={[6, 10, 10]}
+        showControls={showControls}
       />
 
       <ImagePlane
@@ -108,6 +124,7 @@ export const Canvas = () => {
         imageUrl="/3.png"
         label="Condor"
         scale={[1, 1, 1]}
+        showControls={showControls}
       />
 
       {/* Grid */}

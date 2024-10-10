@@ -19,6 +19,7 @@ const ImagePlane = ({
   imageUrl,
   label,
   showControls = false,
+  showLabels = false,
   scale = [2, 2, 1],
 }) => {
   const texture = useLoader(TextureLoader, imageUrl);
@@ -45,27 +46,33 @@ const ImagePlane = ({
             />
           </mesh>
         </Billboard>
-        <Billboard>
-          <Text
-            position={[0, scale[1] / 2 + 0.5, 0]}
+        {showLabels && (
+          <Billboard>
+            <Text
+              position={[0, scale[1] / 2 + 0.5, 0]}
             fontSize={0.5}
             color="white"
             anchorX="center"
             anchorY="middle"
           >
             {label}
-          </Text>
-        </Billboard>
+            </Text>
+          </Billboard>
+        )}
       </group>
     </PivotControls>
   );
 };
 
 export const Canvas = () => {
-  const { showControls } = useControls({
+  const { showControls, showLabels } = useControls({
     showControls: {
       value: false,
       label: 'Controls',
+    },
+    showLabels: {
+      value: false,
+      label: 'Labels',
     },
   });
   return (
@@ -109,6 +116,7 @@ export const Canvas = () => {
         label="Counting"
         scale={[2, 2, 1]}
         showControls={showControls}
+        showLabels={showLabels}
       />
 
       <ImagePlane
@@ -117,6 +125,7 @@ export const Canvas = () => {
         label="A mountain"
         scale={[6, 10, 10]}
         showControls={showControls}
+        showLabels={showLabels}
       />
 
       <ImagePlane
@@ -125,6 +134,7 @@ export const Canvas = () => {
         label="Condor"
         scale={[1, 1, 1]}
         showControls={showControls}
+        showLabels={showLabels}
       />
 
       {/* Grid */}

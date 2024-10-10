@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import useStore from '../store';
 import clsx from 'clsx';
 import { Scene } from '../models';
-import { Canvas } from '../components/canvas';
+import { Canvas } from '../components/Canvas';
 
 export default function Home() {
   const { script, status, setScript, setStatus, loadScript } = useStore();

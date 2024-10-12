@@ -19,6 +19,7 @@ interface IScene {
   description: string;
   layers: ILayer[];
   story: string;
+  pov: string;
 }
 
 interface ILayer {
@@ -57,7 +58,8 @@ export class Script implements IScript {
                 layer.description
               )
           ),
-          scene.story
+          scene.story,
+          scene.pov
         )
     );
   }
@@ -124,6 +126,7 @@ export class Scene implements IScene {
   description: string;
   layers: Layer[];
   story: string;
+  pov: string;
 
   constructor(
     scene_number: number,
@@ -131,7 +134,8 @@ export class Scene implements IScene {
     time: string,
     description: string,
     layers: Layer[],
-    story: string
+    story: string,
+    pov: string
   ) {
     this.scene_number = scene_number;
     this.location = location;
@@ -139,6 +143,7 @@ export class Scene implements IScene {
     this.description = description;
     this.layers = layers;
     this.story = story;
+    this.pov = pov;
   }
 
   toJSON(): IScene {
@@ -149,6 +154,7 @@ export class Scene implements IScene {
       description: this.description,
       layers: this.layers.map((layer) => layer.toJSON()),
       story: this.story,
+      pov: this.pov,
     };
   }
 
@@ -159,7 +165,8 @@ export class Scene implements IScene {
       json.time,
       json.description,
       json.layers.map(Layer.fromJSON),
-      json.story
+      json.story,
+      json.pov
     );
   }
 }

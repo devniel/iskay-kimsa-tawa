@@ -13,6 +13,7 @@ import {
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
 import { useControls } from 'leva';
+import { EffectComposer, DepthOfField } from '@react-three/postprocessing';
 
 const ImagePlane = ({
   position,
@@ -80,6 +81,7 @@ export const Canvas = () => {
       shadows
       raycaster={{ params: { Line: { threshold: 0.15 } } }}
       className="w-full !h-[500px] bg-slate-700"
+      fog={{ color: 'lightblue', near: 10, far: 1000 }}
     >
       {/* Ambiance */}
       <SoftShadows />
@@ -156,6 +158,17 @@ export const Canvas = () => {
       <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
         <GizmoViewport labelColor="white" axisHeadScale={1} />
       </GizmoHelper>
+
+      {/** Effects */}
+      <EffectComposer>
+        <DepthOfField
+          focusDistance={0}  // Adjust focus
+          focalLength={0.02}    // Adjust depth strength
+          bokehScale={2}        // Adjust bokeh strength
+          height={480}          // Height resolution
+        />
+      </EffectComposer>
+
     </R3FCanvas>
   );
 };

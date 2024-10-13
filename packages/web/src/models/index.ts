@@ -31,6 +31,11 @@ interface ILayer {
   description?: string;
 }
 
+interface IAsset {
+  type: 'image' | 'audio';
+  data: string;
+}
+
 export class Script implements IScript {
   title: string;
   characters: Character[];
@@ -170,7 +175,6 @@ export class Scene implements IScene {
     );
   }
 }
-
 export class Layer implements ILayer {
   name: string;
   character?: string;
@@ -215,5 +219,15 @@ export class Layer implements ILayer {
       json.sound,
       json.description
     );
+  }
+}
+
+export class Asset implements IAsset {
+  type: 'image' | 'audio';
+  data: string;
+
+  constructor(data: string) {
+    this.type = 'image';
+    this.data = data;
   }
 }

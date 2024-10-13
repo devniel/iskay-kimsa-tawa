@@ -18,6 +18,9 @@ import { StoryNode } from '../components/Nodes/StoryNode';
 import { SceneNode } from '../components/Nodes/SceneNode';
 import { LayerNode } from '../components/Nodes/LayerNode';
 import ELK from 'elkjs/lib/elk.bundled.js';
+import { Text2AssetNode } from '@/components/Nodes/Text2AssetNode';
+import { AssetNode } from '@/components/Nodes/AssetNode';
+import { mockAssets } from '@/services/api';
 
 const elk = new ELK();
 
@@ -61,7 +64,13 @@ const useLayoutedElements = () => {
 
 const LayoutFlow = () => {
   const nodeTypes = useMemo(
-    () => ({ story: StoryNode, scene: SceneNode, layer: LayerNode }),
+    () => ({
+      story: StoryNode,
+      scene: SceneNode,
+      layer: LayerNode,
+      text2asset: Text2AssetNode,
+      asset: AssetNode,
+    }),
     []
   );
   const { script, status, setScript, setStatus, loadScript } = useStore();
@@ -160,6 +169,58 @@ const LayoutFlow = () => {
           });
         })
       );
+
+      script.scenes.forEach((scene) => {
+        scene.layers.forEach((layer, layerIndex) => {
+          // Text2AssetNode per layer
+          nodesUpdate.push({
+            id: `text2asset-${scene.scene_number}-${layerIndex}`,
+            type: 'text2asset',
+            position: {
+              x: 100,
+              y: 100 * scene.scene_number + 100 * layerIndex,
+            },
+            data: {
+              prompt: scene.description,
+            },
+          });
+          // Text2AssetNode to LayerNode edges
+          edgesUpdate.push({
+            id: `edge-layer-${scene.scene_number}-${layerIndex}-text2asset-${scene.scene_number}-${layerIndex}`,
+            source: `layer-${scene.scene_number}-${layerIndex}`,
+            target: `text2asset-${scene.scene_number}-${layerIndex}`,
+            type: 'smoothstep',
+          });
+        });
+      });
+
+      script.scenes.forEach((scene) => {
+        scene.layers.forEach((layer, layerIndex) => {
+          if(!layer.description) return;
+          // AssetNodes for each layer's Text2asset node
+          nodesUpdate.push({
+            id: `asset-${scene.scene_number}-${layerIndex}`,
+            type: 'asset',
+            position: {
+              x: 100,
+              y: 100 * scene.scene_number + 100 * layerIndex,
+            },
+            data: {
+              object: {
+                type: 'image',
+                data: mockAssets[layer.description]?.data,
+              },
+            },
+          });
+          // Text2AssetNode to AssetNode edges
+          edgesUpdate.push({
+            id: `edge-text2asset-${scene.scene_number}-${layerIndex}-asset-${scene.scene_number}-${layerIndex}`,
+            source: `text2asset-${scene.scene_number}-${layerIndex}`,
+            target: `asset-${scene.scene_number}-${layerIndex}`,
+            type: 'smoothstep',
+          });
+        });
+      });
 
       setNodes(nodesUpdate);
       setEdges(edgesUpdate);

@@ -21,6 +21,7 @@ import ELK from 'elkjs/lib/elk.bundled.js';
 import { Text2AssetNode } from '@/components/Nodes/Text2AssetNode';
 import { AssetNode } from '@/components/Nodes/AssetNode';
 import { mockAssets } from '@/services/api';
+import { CanvasNode } from '@/components/Nodes/CanvasNode';
 
 const elk = new ELK();
 
@@ -70,6 +71,7 @@ const LayoutFlow = () => {
       layer: LayerNode,
       text2asset: Text2AssetNode,
       asset: AssetNode,
+      canvas: CanvasNode,
     }),
     []
   );
@@ -196,7 +198,7 @@ const LayoutFlow = () => {
 
       script.scenes.forEach((scene) => {
         scene.layers.forEach((layer, layerIndex) => {
-          if(!layer.description) return;
+          if (!layer.description) return;
           // AssetNodes for each layer's Text2asset node
           nodesUpdate.push({
             id: `asset-${scene.scene_number}-${layerIndex}`,
@@ -206,10 +208,8 @@ const LayoutFlow = () => {
               y: 100 * scene.scene_number + 100 * layerIndex,
             },
             data: {
-              object: {
-                type: 'image',
-                data: mockAssets[layer.description]?.data,
-              },
+              type: 'image',
+              data: mockAssets[layer.description]?.data,
             },
           });
           // Text2AssetNode to AssetNode edges
@@ -217,6 +217,41 @@ const LayoutFlow = () => {
             id: `edge-text2asset-${scene.scene_number}-${layerIndex}-asset-${scene.scene_number}-${layerIndex}`,
             source: `text2asset-${scene.scene_number}-${layerIndex}`,
             target: `asset-${scene.scene_number}-${layerIndex}`,
+            type: 'smoothstep',
+          });
+        });
+      });
+
+      // Add canvas nodes for each scene
+      script.scenes.forEach((scene) => {
+        nodesUpdate.push({
+          id: `canvas-${scene.scene_number}`,
+          type: 'canvas',
+          position: { x: 100, y: 100 * scene.scene_number },
+          data: {
+            assets: scene.layers
+              .filter((layer) => layer.description)
+              .map(layer => mockAssets[layer.description])
+              .filter(Boolean)
+              .flatMap(asset => asset),
+            sceneNumber: scene.scene_number,
+          },
+          draggable: false,
+          style: {
+            width: '1366px',
+            height: '768px',
+          },
+        });
+      });
+
+      // Add edges from scene assets to scene canvas
+      script.scenes.forEach((scene) => {
+        scene.layers.forEach((layer, layerIndex) => {
+          if (!layer.description) return;
+          edgesUpdate.push({
+            id: `edge-asset-${scene.scene_number}-${layerIndex}-canvas-${scene.scene_number}`,
+            source: `asset-${scene.scene_number}-${layerIndex}`,
+            target: `canvas-${scene.scene_number}`,
             type: 'smoothstep',
           });
         });
@@ -244,6 +279,9 @@ const LayoutFlow = () => {
       onEdgesChange={onEdgesChange}
       fitView
       colorMode="dark"
+      panOnDrag={[2]}
+      zoomOnScroll={false}
+
     >
       <Background />
       <Controls />

@@ -5,10 +5,11 @@
   "private": true,
   "workspaces": [
     "packages/api",
-    "packages/web"
+    "packages/web",
+    "packages/ai"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=packages/web & npm run dev --workspace=packages/api",
+    "dev": "npm run dev --workspace=packages/web & npm run dev --workspace=packages/api & npm run dev --workspace=packages/ai",
     "build": "npm run build --workspace=packages/web && npm run build --workspace=packages/api",
     "start": "npm run start --workspace=packages/web & npm run start --workspace=packages/api"
   },

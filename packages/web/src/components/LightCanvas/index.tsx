@@ -4,22 +4,36 @@ import { SoftShadows, OrthographicCamera } from '@react-three/drei';
 import * as THREE from 'three';
 import { Asset } from '@/models';
 import { ImageMesh } from './ImageMesh';
+import {
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
+  ChevronDoubleDownIcon,
+  ChevronDoubleUpIcon,
+  TrashIcon,
+} from '@heroicons/react/20/solid';
 
 interface InteractionHandlerProps {
-  imagePlaneRefs: React.MutableRefObject<(THREE.Mesh | null)[]>;
+  imageMeshesRefs: React.MutableRefObject<
+    {
+      id: string;
+      mesh: THREE.Mesh;
+    }[]
+  >;
   updateImagePlanePosition: (
     mesh: THREE.Mesh,
     newPosition: [number, number, number]
   ) => void;
   floorPlane: THREE.Plane;
   debug?: boolean;
+  onSelectedMeshChange: (mesh: THREE.Mesh | null) => void;
 }
 
 const InteractionHandler = ({
-  imagePlaneRefs,
+  imageMeshesRefs,
   updateImagePlanePosition,
   floorPlane,
   debug,
+  onSelectedMeshChange,
 }: InteractionHandlerProps) => {
   const { camera, raycaster, scene, gl } = useThree();
   const draggedObject = useRef(null);
@@ -67,9 +81,11 @@ const InteractionHandler = ({
       }
 
       // Get all meshes in the scene
-      const meshes = imagePlaneRefs.current.filter(
-        (ref): ref is THREE.Mesh => ref !== null
-      );
+      const meshes = imageMeshesRefs.current
+        .filter(
+          (ref): ref is { id: string; mesh: THREE.Mesh } => ref.mesh !== null
+        )
+        .map((ref) => ref.mesh);
 
       // Perform intersection test
       // Set second argument as false as we don't need to check children
@@ -79,13 +95,16 @@ const InteractionHandler = ({
         // Intersects has a list of objects that are intersected by the raycaster
         // We want to get the topmost object, which is the last one in the array
         const topObject = intersects[intersects.length - 1].object;
+        if (topObject !== draggedObject.current) {
+          onSelectedMeshChange(topObject);
+        }
         draggedObject.current = topObject;
         dragStartPosition.current.copy(topObject.position);
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
       }
     },
-    [camera, raycaster, scene, imagePlaneRefs]
+    [camera, raycaster, scene, imageMeshesRefs]
   );
 
   const handlePointerMove = useCallback(
@@ -129,13 +148,22 @@ const InteractionHandler = ({
 export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
   // Floor plane with a normal pointing in the positive z direction
   const floorPlane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0));
-  const imageMeshRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const imageMeshesRefs = useRef<
+    {
+      id: string;
+      mesh: THREE.Mesh;
+    }[]
+  >([]);
   const [imageMeshPositions, setImageMeshPositions] = useState(
     assets.map((_, index) => [index * 0.1, 0, 0] as [number, number, number])
   );
-  const updateImageMeshPosition = useCallback(
+  const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+
+  const handleUpdateImageMeshPosition = useCallback(
     (mesh: THREE.Mesh, newPosition: [number, number, number]) => {
-      const index = imageMeshRefs.current.findIndex((ref) => ref === mesh);
+      const index = imageMeshesRefs.current.findIndex(
+        (ref) => ref.id === mesh.userData.id
+      );
       if (index !== -1) {
         setImageMeshPositions((prev) => {
           const newPositions = [...prev];
@@ -147,57 +175,127 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
     []
   );
 
+  const handleOnSelectedMeshChange = (mesh: THREE.Mesh | null) => {
+    setSelectedAsset(mesh?.userData.id);
+  };
+
   return (
-    <R3FCanvas
-      shadows
-      raycaster={{ params: { Line: { threshold: 0.15 } } }}
-      className="bg-black"
-      resize={{ offsetSize: true }}
-      fog={{ color: 'lightblue', near: 10, far: 1000 }}
-      dpr={[1, 2]}
-      style={{ touchAction: 'none' }}
-    >
-
-      {/* Handler for dragging meshes */}
-      <InteractionHandler
-        imagePlaneRefs={imageMeshRefs}
-        floorPlane={floorPlane.current}
-        updateImagePlanePosition={updateImageMeshPosition}
-      />
-
-      {/* Ambiance */}
-      <SoftShadows />
-      <directionalLight
-        castShadow
-        position={[2.5, 5, 5]}
-        intensity={1.5}
-        shadow-mapSize={[1024, 1024]}
+    <>
+      <R3FCanvas
+        shadows
+        raycaster={{ params: { Line: { threshold: 0.15 } } }}
+        className="bg-black"
+        resize={{ offsetSize: true }}
+        fog={{ color: 'lightblue', near: 10, far: 1000 }}
+        dpr={[1, 2]}
+        style={{ touchAction: 'none' }}
       >
-        <orthographicCamera
-          attach="shadow-camera"
-          args={[-5, 5, 5, -5, 1, 50]}
+        {/* Handler for dragging meshes */}
+        <InteractionHandler
+          imageMeshesRefs={imageMeshesRefs}
+          floorPlane={floorPlane.current}
+          updateImagePlanePosition={handleUpdateImageMeshPosition}
+          onSelectedMeshChange={handleOnSelectedMeshChange}
         />
-      </directionalLight>
-      <ambientLight intensity={1} />
 
-      {/* Cameras */}
-      <OrthographicCamera makeDefault position={[0, 0, 1]} zoom={100} />
+        {/* Ambiance */}
+        <SoftShadows />
+        <directionalLight
+          castShadow
+          position={[2.5, 5, 5]}
+          intensity={1.5}
+          shadow-mapSize={[1024, 1024]}
+        >
+          <orthographicCamera
+            attach="shadow-camera"
+            args={[-5, 5, 5, -5, 1, 50]}
+          />
+        </directionalLight>
+        <ambientLight intensity={1} />
 
-      {/* Objects */}
-      <mesh scale={20} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry />
-        <shadowMaterial transparent opacity={1} />
-      </mesh>
+        {/* Cameras */}
+        <OrthographicCamera makeDefault position={[0, 0, 1]} zoom={100} />
 
-      {/* Image Meshes */}
-      {assets.map((asset, index) => (
-        <ImageMesh
-          ref={(el) => (imageMeshRefs.current[index] = el)}
-          key={index}
-          position={imageMeshPositions[index]}
-          imageUrl={asset.data}
-        />
-      ))}
-    </R3FCanvas>
+        {/* Objects */}
+        <mesh scale={20} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry />
+          <shadowMaterial transparent opacity={0.5} />
+        </mesh>
+
+        {/* Image Meshes */}
+        {assets.map((asset, index) => (
+          <ImageMesh
+            ref={(el: THREE.Mesh) => {
+              if (el) {
+                imageMeshesRefs.current[index] = {
+                  id: asset.id,
+                  mesh: el as THREE.Mesh,
+                };
+                el.userData = {
+                  id: asset.id,
+                };
+              }
+            }}
+            key={index}
+            id={asset.id}
+            position={imageMeshPositions[index]}
+            imageUrl={asset.data}
+            initialScale={
+              selectedAsset === imageMeshesRefs.current[index]?.id
+                ? [1.1, 1.1, 1.1]
+                : [1, 1, 1]
+            }
+          />
+        ))}
+      </R3FCanvas>
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4">
+        {selectedAsset ? (
+          <div className="flex items-center justify-between">
+            <img
+              alt="Selected asset"
+              className="w-10 h-10"
+              src={assets.find((asset) => asset.id === selectedAsset)?.data}
+            />
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Close"
+              onClick={() => handleOnSelectedMeshChange(null)}
+            >
+              <ArrowsPointingInIcon className="h-10 w-10" />
+            </button>
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Close"
+              onClick={() => handleOnSelectedMeshChange(null)}
+            >
+              <ArrowsPointingOutIcon className="h-10 w-10" />
+            </button>
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Close"
+              onClick={() => handleOnSelectedMeshChange(null)}
+            >
+              <ChevronDoubleUpIcon className="h-10 w-10" />
+            </button>
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Close"
+              onClick={() => handleOnSelectedMeshChange(null)}
+            >
+              <ChevronDoubleDownIcon className="h-10 w-10" />
+            </button>
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Close"
+              onClick={() => handleOnSelectedMeshChange(null)}
+            >
+              <TrashIcon className="h-10 w-10" />
+            </button>
+          </div>
+        ) : (
+          <span>No object selected</span>
+        )}
+      </div>
+    </>
   );
 };

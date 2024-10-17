@@ -1,4 +1,5 @@
 import * as yaml from 'js-yaml';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IScript {
   title: string;
@@ -225,9 +226,11 @@ export class Layer implements ILayer {
 export class Asset implements IAsset {
   type: 'image' | 'audio';
   data: string;
+  id: string;
 
   constructor(data: string) {
     this.type = 'image';
     this.data = data;
+    this.id = uuidv4();
   }
 }

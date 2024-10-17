@@ -5,6 +5,7 @@ import { animated } from '@react-spring/three';
 import * as THREE from 'three';
 
 interface ImageMeshProps {
+  id: string;
   position: [number, number, number];
   imageUrl: string;
   initialScale?: [number, number, number];

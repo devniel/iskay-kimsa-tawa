@@ -129,36 +129,44 @@ export const fetchScript = async (): Promise<Script> => {
 export const mockAssets: Record<string, Asset> = {
   [`A detailed image of a human hand with fingers extended to show the number 1. The hand is positioned in front of a neutral background, with the index finger pointing upward, while the other fingers are closed into the palm. The skin tone is natural, and the lighting highlights the contours and details of the hand. The image focuses on the hand, with no other elements distracting from the gesture.`]:
     {
+      id: '1',
       type: 'image',
       data: '/mocks/counting_1.png',
     },
   [`A detailed image of a human hand showing the number 2 by holding the index and middle fingers up, while the other fingers are curled into the palm. The hand is positioned in front of a neutral background with soft lighting, highlighting the texture of the skin and the smooth lines of the fingers. The gesture is clear and central to the image, with no other distractions.`]:
     {
+      id: '2',
       type: 'image',
       data: '/mocks/counting_2.png',
     },
   [`A detailed image of a human hand showing the number 3 by holding the index, middle, and ring fingers up, while the thumb and pinky are curled into the palm. The hand is positioned in front of a neutral background with soft lighting, emphasizing the skin's natural texture and the clarity of the gesture. The focus is entirely on the hand and its position, with no other distracting elements.`]:
     {
+      id: '3',
       type: 'image',
       data: '/mocks/counting_3.png',
     },
   [`A bird flying, casting a shadow briefly.`]: {
+    id: '4',
     type: 'image',
     data: '/mocks/the_bird.png',
   },
   [`A collection of trees on the mountain trail.`]: {
+    id: '5',
     type: 'image',
     data: '/mocks/the_tree.png',
   },
   [`The sun is shining down on the mountain trail.`]: {
+    id: '6',
     type: 'image',
     data: '/mocks/the_sun.png',
   },
   [`An active Inca city.`]: {
+    id: '7',
     type: 'image',
     data: '/mocks/the_inca.png',
   },
   [`A mountain.`]: {
+    id: '8',
     type: 'image',
     data: '/mocks/the_mountain.png',
   },

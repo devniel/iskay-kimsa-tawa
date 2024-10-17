@@ -12,6 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "@jest/globals": "^29.7.0",
     "@react-spring/three": "^9.7.5",
     "@react-three/drei": "^9.114.3",
@@ -30,6 +31,7 @@
     "react-dom": "^18",
     "three": "^0.169.0",
     "ts-jest": "^29.2.5",
+    "uuid": "^10.0.0",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/three": "^0.169.0",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "husky": "^9.1.6",

@@ -146,26 +146,9 @@ export const mockAssets: Record<string, Asset> = {
     type: 'image',
     data: '/mocks/the_bird.png',
   },
-  [`A river runs along the edge of a mountain trail, its sound barely audible.`]:
-    {
-      type: 'image',
-      data: '/mocks/the_river.png',
-    },
-  [`The wind picks up, rustling the leaves of nearby trees.`]: {
-    type: 'audio',
-    data: 'https://picsum.photos/200/300',
-  },
-  [`A collection of stones on the mountain trail.`]: {
-    type: 'image',
-    data: '/mocks/the_stones.png',
-  },
   [`A collection of trees on the mountain trail.`]: {
     type: 'image',
-    data: '/mocks/the_trees.png',
-  },
-  [`The sky is blue, with a few clouds.`]: {
-    type: 'image',
-    data: '/mocks/the_sky.png',
+    data: '/mocks/the_tree.png',
   },
   [`The sun is shining down on the mountain trail.`]: {
     type: 'image',
@@ -173,7 +156,7 @@ export const mockAssets: Record<string, Asset> = {
   },
   [`An active Inca city.`]: {
     type: 'image',
-    data: '/mocks/the_inca_city.png',
+    data: '/mocks/the_inca.png',
   },
   [`A mountain.`]: {
     type: 'image',

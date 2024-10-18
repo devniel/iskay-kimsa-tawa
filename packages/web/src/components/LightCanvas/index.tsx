@@ -7,10 +7,10 @@ import { ImageMesh } from './ImageMesh';
 import {
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
-  ChevronDoubleDownIcon,
-  ChevronDoubleUpIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid';
+import { LayerMoveUpIcon } from '../Icons/LayerMoveUpIcon';
+import { LayerMoveDownIcon } from '../Icons/LayerMoveDownIcon';
 
 interface MeshSetting {
   id: string;
@@ -18,6 +18,7 @@ interface MeshSetting {
   position: [number, number, number];
   imageUrl: string;
 }
+
 interface InteractionHandlerProps {
   meshSettings: MeshSetting[];
   updateImagePlanePosition: (
@@ -42,6 +43,7 @@ const InteractionHandler = ({
   const { camera, raycaster, scene, gl } = useThree();
   const draggedMeshId = useRef<string | null>(null);
   const dragStartPosition = useRef(new THREE.Vector3());
+  const dragOffset = useRef(new THREE.Vector3());
 
   // Debug helpers
   const rayHelper = useRef<THREE.ArrowHelper>(
@@ -78,7 +80,6 @@ const InteractionHandler = ({
 
   const handlePointerMove = useCallback(
     (event: MouseEvent) => {
-      console.log('handlePointerMove', { event });
       if (draggedMeshId.current) {
         const mouse = getMousePosition(event);
         raycaster.setFromCamera(mouse, camera);
@@ -89,13 +90,16 @@ const InteractionHandler = ({
           );
 
           if (draggedMesh) {
-            const newPosition: [number, number, number] = [
-              intersectionPoint.x,
-              intersectionPoint.y,
+            // Apply the stored offset to the new intersection point
+            const newPosition = new THREE.Vector3().addVectors(
+              intersectionPoint,
+              dragOffset.current
+            );
+            updateImagePlanePosition(draggedMeshId.current, [
+              newPosition.x,
+              newPosition.y,
               draggedMesh.position[2], // Keep the original Z position
-            ];
-
-            updateImagePlanePosition(draggedMeshId.current, newPosition);
+            ]);
           }
         }
       }
@@ -120,7 +124,6 @@ const InteractionHandler = ({
 
   const handlePointerDown = useCallback(
     (event: MouseEvent) => {
-      console.log('handlePointerDown', { event });
       const mouse = getMousePosition(event);
       raycaster.setFromCamera(mouse, camera);
 
@@ -135,7 +138,6 @@ const InteractionHandler = ({
       const intersectionPoint = new THREE.Vector3();
 
       if (raycaster.ray.intersectPlane(floorPlane, intersectionPoint)) {
-        console.log('Intersection found');
         // Find the closest image plane to the intersection point
         let closestMesh: MeshSetting | null = null;
         let closestDistance = Infinity;
@@ -149,14 +151,14 @@ const InteractionHandler = ({
           }
         });
 
-        console.log({ closestMesh, closestDistance });
-
         if (closestMesh) {
+          const position = (closestMesh as MeshSetting).position;
           // Adjust threshold as needed
           draggedMeshId.current = (closestMesh as MeshSetting).id;
-          dragStartPosition.current.set(
-            ...(closestMesh as MeshSetting).position
-          );
+          dragStartPosition.current.set(...position);
+          // Calculate and store the offset between the intersection point and the mesh's current position
+          const meshPosition = new THREE.Vector3(...position);
+          dragOffset.current.subVectors(meshPosition, intersectionPoint);
 
           onSelectedMeshChange(draggedMeshId.current, {
             x: intersectionPoint.x,
@@ -164,8 +166,6 @@ const InteractionHandler = ({
           });
           window.addEventListener('pointermove', handlePointerMove);
           window.addEventListener('pointerup', handlePointerUp);
-
-          console.log('Dragging mesh:', (closestMesh as MeshSetting).id);
         }
       }
     },
@@ -239,7 +239,6 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
 
   const handleOnResizeUpMesh = () => {
     if (selectedMesh) {
-      console.log('handleOnResizeUpMesh', { selectedMesh });
       setMeshSettings((prev) =>
         prev.map((m) => {
           const scale = m.scale.map((s) => s * 1.1) as [number, number, number];
@@ -270,7 +269,7 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
     }
   };
 
-  const handleOnLayerUpMesh = () => {
+  const handleOnLayerDownMesh = () => {
     if (selectedMesh) {
       setMeshSettings((prev) => {
         const index = prev.findIndex((m) => m.id === selectedMesh.id);
@@ -287,7 +286,7 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
     }
   };
 
-  const handleOnLayerDownMesh = () => {
+  const handleOnLayerUpMesh = () => {
     if (selectedMesh) {
       setMeshSettings((prev) => {
         const index = prev.findIndex((m) => m.id === selectedMesh.id);
@@ -301,6 +300,13 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
         }
         return prev;
       });
+    }
+  };
+
+  const handleOnRemoveMesh = () => {
+    if (selectedMesh) {
+      setMeshSettings((prev) => prev.filter((m) => m.id !== selectedMesh.id));
+      setSelectedMesh(null);
     }
   };
 
@@ -348,13 +354,14 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
         </mesh>
 
         {/* Image Meshes */}
-        {meshSettings.map(({ id, position, imageUrl, scale }) => (
+        {meshSettings.map(({ id, position, imageUrl, scale }, index) => (
           <ImageMesh
             key={id}
             id={id}
             position={position}
             imageUrl={imageUrl}
             scale={scale}
+            renderOrder={index}
           />
         ))}
       </R3FCanvas>
@@ -383,27 +390,27 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
               aria-label="Layer up"
-              onClick={handleOnLayerUpMesh}
+              onClick={handleOnLayerDownMesh}
             >
-              <ChevronDoubleUpIcon className="h-10 w-10" />
+              <LayerMoveDownIcon className="h-10 w-10" />
             </button>
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
               aria-label="Layer down"
-              onClick={handleOnLayerDownMesh}
+              onClick={handleOnLayerUpMesh}
             >
-              <ChevronDoubleDownIcon className="h-10 w-10" />
+              <LayerMoveUpIcon className="h-10 w-10" />
             </button>
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
               aria-label="Deselect"
-              onClick={() => setSelectedMesh(null)}
+              onClick={() => handleOnRemoveMesh()}
             >
               <TrashIcon className="h-10 w-10" />
             </button>
           </div>
         ) : (
-          <span>No object selected</span>
+          <span>No sticker selected</span>
         )}
       </div>
     </>

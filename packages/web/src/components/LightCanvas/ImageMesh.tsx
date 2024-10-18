@@ -8,15 +8,15 @@ interface ImageMeshProps {
   id: string;
   position: [number, number, number];
   imageUrl: string;
-  initialScale?: [number, number, number];
+  scale?: [number, number, number];
 }
 
 export const ImageMesh = forwardRef<THREE.Mesh, ImageMeshProps>(
-  ({ position, imageUrl, initialScale = [1, 1, 1] }, ref) => {
+  ({ position, imageUrl, scale = [1, 1, 1] }, ref) => {
     const texture = useLoader(TextureLoader, imageUrl);
 
     return (
-      <animated.mesh position={position} scale={initialScale} ref={ref}>
+      <animated.mesh position={position} scale={scale} ref={ref}>
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
           map={texture}

@@ -12,31 +12,35 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid';
 
+interface MeshSetting {
+  id: string;
+  scale: [number, number, number];
+  position: [number, number, number];
+  imageUrl: string;
+}
 interface InteractionHandlerProps {
-  imageMeshesRefs: React.MutableRefObject<
-    {
-      id: string;
-      mesh: THREE.Mesh;
-    }[]
-  >;
+  meshSettings: MeshSetting[];
   updateImagePlanePosition: (
-    mesh: THREE.Mesh,
+    id: string,
     newPosition: [number, number, number]
   ) => void;
   floorPlane: THREE.Plane;
   debug?: boolean;
-  onSelectedMeshChange: (mesh: THREE.Mesh | null) => void;
+  onSelectedMeshChange: (
+    id: string | null,
+    { x, y }: { x: number; y: number }
+  ) => void;
 }
 
 const InteractionHandler = ({
-  imageMeshesRefs,
+  meshSettings,
   updateImagePlanePosition,
   floorPlane,
   debug,
   onSelectedMeshChange,
 }: InteractionHandlerProps) => {
   const { camera, raycaster, scene, gl } = useThree();
-  const draggedObject = useRef(null);
+  const draggedMeshId = useRef<string | null>(null);
   const dragStartPosition = useRef(new THREE.Vector3());
 
   // Debug helpers
@@ -57,20 +61,66 @@ const InteractionHandler = ({
     return () => scene.remove(rayHelper.current);
   }, [scene]);
 
-  const getMousePosition = (event: MouseEvent) => {
-    // Get the canvas element
-    const canvas = gl.domElement;
-    // Get the bounding rectangle of the canvas
-    const rect = canvas.getBoundingClientRect();
-    // Calculate mouse position in normalized device coordinates (-1 to +1)
-    const mouse = new THREE.Vector2();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    return mouse;
-  };
+  const getMousePosition = useCallback(
+    (event: MouseEvent) => {
+      // Get the canvas element
+      const canvas = gl.domElement;
+      // Get the bounding rectangle of the canvas
+      const rect = canvas.getBoundingClientRect();
+      // Calculate mouse position in normalized device coordinates (-1 to +1)
+      const mouse = new THREE.Vector2();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      return mouse;
+    },
+    [gl]
+  );
+
+  const handlePointerMove = useCallback(
+    (event: MouseEvent) => {
+      console.log('handlePointerMove', { event });
+      if (draggedMeshId.current) {
+        const mouse = getMousePosition(event);
+        raycaster.setFromCamera(mouse, camera);
+        const intersectionPoint = new THREE.Vector3();
+        if (raycaster.ray.intersectPlane(floorPlane, intersectionPoint)) {
+          const draggedMesh = meshSettings.find(
+            (mesh) => mesh.id === draggedMeshId.current
+          );
+
+          if (draggedMesh) {
+            const newPosition: [number, number, number] = [
+              intersectionPoint.x,
+              intersectionPoint.y,
+              draggedMesh.position[2], // Keep the original Z position
+            ];
+
+            updateImagePlanePosition(draggedMeshId.current, newPosition);
+          }
+        }
+      }
+    },
+    [
+      camera,
+      raycaster,
+      floorPlane,
+      updateImagePlanePosition,
+      meshSettings,
+      getMousePosition,
+    ]
+  );
+
+  const handlePointerUp = useCallback(() => {
+    if (draggedMeshId.current) {
+      draggedMeshId.current = null;
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    }
+  }, [draggedMeshId, handlePointerMove]);
 
   const handlePointerDown = useCallback(
     (event: MouseEvent) => {
+      console.log('handlePointerDown', { event });
       const mouse = getMousePosition(event);
       raycaster.setFromCamera(mouse, camera);
 
@@ -80,59 +130,57 @@ const InteractionHandler = ({
         rayHelper.current.position.copy(raycaster.ray.origin);
       }
 
-      // Get all meshes in the scene
-      const meshes = imageMeshesRefs.current
-        .filter(
-          (ref): ref is { id: string; mesh: THREE.Mesh } => ref.mesh !== null
-        )
-        .map((ref) => ref.mesh);
-
       // Perform intersection test
       // Set second argument as false as we don't need to check children
-      const intersects = raycaster.intersectObjects(meshes, false);
+      const intersectionPoint = new THREE.Vector3();
 
-      if (intersects.length > 0) {
-        // Intersects has a list of objects that are intersected by the raycaster
-        // We want to get the topmost object, which is the last one in the array
-        const topObject = intersects[intersects.length - 1].object;
-        if (topObject !== draggedObject.current) {
-          onSelectedMeshChange(topObject);
+      if (raycaster.ray.intersectPlane(floorPlane, intersectionPoint)) {
+        console.log('Intersection found');
+        // Find the closest image plane to the intersection point
+        let closestMesh: MeshSetting | null = null;
+        let closestDistance = Infinity;
+
+        meshSettings.forEach((meshSetting) => {
+          const meshPosition = new THREE.Vector3(...meshSetting.position);
+          const distance = meshPosition.distanceTo(intersectionPoint);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestMesh = meshSetting;
+          }
+        });
+
+        console.log({ closestMesh, closestDistance });
+
+        if (closestMesh) {
+          // Adjust threshold as needed
+          draggedMeshId.current = (closestMesh as MeshSetting).id;
+          dragStartPosition.current.set(
+            ...(closestMesh as MeshSetting).position
+          );
+
+          onSelectedMeshChange(draggedMeshId.current, {
+            x: intersectionPoint.x,
+            y: intersectionPoint.y,
+          });
+          window.addEventListener('pointermove', handlePointerMove);
+          window.addEventListener('pointerup', handlePointerUp);
+
+          console.log('Dragging mesh:', (closestMesh as MeshSetting).id);
         }
-        draggedObject.current = topObject;
-        dragStartPosition.current.copy(topObject.position);
-        window.addEventListener('pointermove', handlePointerMove);
-        window.addEventListener('pointerup', handlePointerUp);
       }
     },
-    [camera, raycaster, scene, imageMeshesRefs]
+    [
+      camera,
+      raycaster,
+      floorPlane,
+      meshSettings,
+      getMousePosition,
+      onSelectedMeshChange,
+      handlePointerMove,
+      handlePointerUp,
+      debug,
+    ]
   );
-
-  const handlePointerMove = useCallback(
-    (event: MouseEvent) => {
-      if (draggedObject.current) {
-        const mouse = getMousePosition(event);
-        raycaster.setFromCamera(mouse, camera);
-        const intersectionPoint = new THREE.Vector3();
-        if (raycaster.ray.intersectPlane(floorPlane, intersectionPoint)) {
-          const newPosition: [number, number, number] = [
-            intersectionPoint.x,
-            intersectionPoint.y,
-            dragStartPosition.current.z, // Keep the original Z position
-          ];
-          updateImagePlanePosition(draggedObject.current, newPosition);
-        }
-      }
-    },
-    [camera, raycaster, updateImagePlanePosition]
-  );
-
-  const handlePointerUp = useCallback(() => {
-    if (draggedObject.current) {
-      draggedObject.current = null;
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
-    }
-  }, []);
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -148,35 +196,112 @@ const InteractionHandler = ({
 export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
   // Floor plane with a normal pointing in the positive z direction
   const floorPlane = useRef(new THREE.Plane(new THREE.Vector3(0, 0, 1), 0));
-  const imageMeshesRefs = useRef<
-    {
-      id: string;
-      mesh: THREE.Mesh;
-    }[]
-  >([]);
-  const [imageMeshPositions, setImageMeshPositions] = useState(
-    assets.map((_, index) => [index * 0.1, 0, 0] as [number, number, number])
+  const [selectedMesh, setSelectedMesh] = useState<{
+    id: string;
+    origin: { x: number; y: number };
+  } | null>(null);
+  const [meshSettings, setMeshSettings] = useState<MeshSetting[]>(
+    assets.map((asset, index) => ({
+      id: asset.id,
+      scale: [1, 1, 1],
+      position: [index * 0.1, 0, 0] as [number, number, number],
+      imageUrl: asset.data,
+    }))
   );
-  const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
 
   const handleUpdateImageMeshPosition = useCallback(
-    (mesh: THREE.Mesh, newPosition: [number, number, number]) => {
-      const index = imageMeshesRefs.current.findIndex(
-        (ref) => ref.id === mesh.userData.id
-      );
-      if (index !== -1) {
-        setImageMeshPositions((prev) => {
-          const newPositions = [...prev];
-          newPositions[index] = newPosition as [number, number, number];
-          return newPositions;
-        });
-      }
+    (id: string, newPosition: [number, number, number]) => {
+      setMeshSettings((prev) => {
+        return prev.map((m) =>
+          m.id === id ? { ...m, position: newPosition } : m
+        );
+      });
     },
     []
   );
 
-  const handleOnSelectedMeshChange = (mesh: THREE.Mesh | null) => {
-    setSelectedAsset(mesh?.userData.id);
+  const handleOnSelectedMeshChange = (
+    id: string | null,
+    { x, y }: { x: number; y: number }
+  ) => {
+    if (!id) {
+      setSelectedMesh(null);
+    } else {
+      setSelectedMesh({
+        id,
+        origin: {
+          x,
+          y,
+        },
+      });
+    }
+  };
+
+  const handleOnResizeUpMesh = () => {
+    if (selectedMesh) {
+      console.log('handleOnResizeUpMesh', { selectedMesh });
+      setMeshSettings((prev) =>
+        prev.map((m) => {
+          const scale = m.scale.map((s) => s * 1.1) as [number, number, number];
+          return m.id === selectedMesh.id
+            ? {
+                ...m,
+                scale,
+              }
+            : m;
+        })
+      );
+    }
+  };
+
+  const handleOnResizeDownMesh = () => {
+    if (selectedMesh) {
+      setMeshSettings((prev) =>
+        prev.map((m) => {
+          const scale = m.scale.map((s) => s * 0.9) as [number, number, number];
+          return m.id === selectedMesh.id
+            ? {
+                ...m,
+                scale,
+              }
+            : m;
+        })
+      );
+    }
+  };
+
+  const handleOnLayerUpMesh = () => {
+    if (selectedMesh) {
+      setMeshSettings((prev) => {
+        const index = prev.findIndex((m) => m.id === selectedMesh.id);
+        if (index > 0) {
+          const newMeshes = [...prev];
+          [newMeshes[index - 1], newMeshes[index]] = [
+            newMeshes[index],
+            newMeshes[index - 1],
+          ];
+          return newMeshes;
+        }
+        return prev;
+      });
+    }
+  };
+
+  const handleOnLayerDownMesh = () => {
+    if (selectedMesh) {
+      setMeshSettings((prev) => {
+        const index = prev.findIndex((m) => m.id === selectedMesh.id);
+        if (index < prev.length - 1) {
+          const newMeshes = [...prev];
+          [newMeshes[index], newMeshes[index + 1]] = [
+            newMeshes[index + 1],
+            newMeshes[index],
+          ];
+          return newMeshes;
+        }
+        return prev;
+      });
+    }
   };
 
   return (
@@ -192,7 +317,7 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
       >
         {/* Handler for dragging meshes */}
         <InteractionHandler
-          imageMeshesRefs={imageMeshesRefs}
+          meshSettings={meshSettings}
           floorPlane={floorPlane.current}
           updateImagePlanePosition={handleUpdateImageMeshPosition}
           onSelectedMeshChange={handleOnSelectedMeshChange}
@@ -223,71 +348,56 @@ export const LightCanvas = ({ assets }: { assets: Asset[] }) => {
         </mesh>
 
         {/* Image Meshes */}
-        {assets.map((asset, index) => (
+        {meshSettings.map(({ id, position, imageUrl, scale }) => (
           <ImageMesh
-            ref={(el: THREE.Mesh) => {
-              if (el) {
-                imageMeshesRefs.current[index] = {
-                  id: asset.id,
-                  mesh: el as THREE.Mesh,
-                };
-                el.userData = {
-                  id: asset.id,
-                };
-              }
-            }}
-            key={index}
-            id={asset.id}
-            position={imageMeshPositions[index]}
-            imageUrl={asset.data}
-            initialScale={
-              selectedAsset === imageMeshesRefs.current[index]?.id
-                ? [1.1, 1.1, 1.1]
-                : [1, 1, 1]
-            }
+            key={id}
+            id={id}
+            position={position}
+            imageUrl={imageUrl}
+            scale={scale}
           />
         ))}
       </R3FCanvas>
       <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4">
-        {selectedAsset ? (
+        {selectedMesh ? (
           <div className="flex items-center justify-between">
             <img
               alt="Selected asset"
               className="w-10 h-10"
-              src={assets.find((asset) => asset.id === selectedAsset)?.data}
+              src={meshSettings.find((m) => m.id === selectedMesh.id)?.imageUrl}
             />
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-              aria-label="Close"
-              onClick={() => handleOnSelectedMeshChange(null)}
-            >
-              <ArrowsPointingInIcon className="h-10 w-10" />
-            </button>
-            <button
-              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-              aria-label="Close"
-              onClick={() => handleOnSelectedMeshChange(null)}
+              aria-label="Resize up"
+              onClick={handleOnResizeUpMesh}
             >
               <ArrowsPointingOutIcon className="h-10 w-10" />
             </button>
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-              aria-label="Close"
-              onClick={() => handleOnSelectedMeshChange(null)}
+              aria-label="Resize down"
+              onClick={handleOnResizeDownMesh}
+            >
+              <ArrowsPointingInIcon className="h-10 w-10" />
+            </button>
+            <button
+              className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
+              aria-label="Layer up"
+              onClick={handleOnLayerUpMesh}
             >
               <ChevronDoubleUpIcon className="h-10 w-10" />
             </button>
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-              aria-label="Close"
-              onClick={() => handleOnSelectedMeshChange(null)}
+              aria-label="Layer down"
+              onClick={handleOnLayerDownMesh}
             >
               <ChevronDoubleDownIcon className="h-10 w-10" />
             </button>
             <button
               className="text-white inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:outline-none"
-              aria-label="Close"
-              onClick={() => handleOnSelectedMeshChange(null)}
+              aria-label="Deselect"
+              onClick={() => setSelectedMesh(null)}
             >
               <TrashIcon className="h-10 w-10" />
             </button>

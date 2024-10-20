@@ -51,6 +51,9 @@ importers:
       elkjs:
         specifier: ^0.9.3
         version: 0.9.3
+      eventemitter3:
+        specifier: ^5.0.1
+        version: 5.0.1
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.10)(ts-node@10.9.2(@types/node@20.16.10)(typescript@5.6.2))
